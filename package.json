@@ -1,0 +1,23 @@
+{
+  "name": "xtabout",
+  "productName": "XTabout",
+  "version": "05.07.2025",
+  "description": "Herramienta para mostrar la información de macOS de una manera más linda.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "mac": {
+      "icon": "src/media/LogoFinal.icns"
+    }
+  }
+}

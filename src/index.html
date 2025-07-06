@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XTabout</title>
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
+    <link rel="stylesheet" href="styles/index.css">
+    <script src="scripts/main.js"></script>
+</head>
+<body>
+    <div class="window-controls">
+        <div class="control-button close" onclick="window.require('electron').ipcRenderer.send('window-controls', 'close')">✕</div>
+        <div class="control-button minimize disabled">−</div>
+        <div class="control-button maximize disabled"></div>
+    </div>
+<div class="glass-window">
+    <div class="container">
+        <div class="mac-icon">
+          <img src="media/default.png">
+        </div>
+
+        <h1 class="selectable" id="title">...</h1>
+        <div class="model selectable" id="model">...</div>
+
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-title">Editar</div>
+                <input type="text" id="modalInput" class="modal-input">
+                <div class="modal-buttons">
+                    <button class="modal-button" onclick="closeModal()">Cancelar</button>
+                    <button class="modal-button primary" onclick="saveModalChanges()">Guardar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-label">Procesador</div>
+            <div class="info-value selectable" data-field="processor">...</div>
+
+            <div class="info-label">Gráficos</div>
+            <div class="info-value selectable" data-field="graphics">...</div>
+
+            <div class="info-label">Memoria</div>
+            <div class="info-value selectable" data-field="memory">...</div>
+
+            <div class="info-label">Número de serie</div>
+            <div class="info-value selectable" id="serialNumberValue" data-field="serialNumber">...</div>
+
+
+            <div class="info-label">macOS</div>
+            <div class="info-value selectable" data-field="osVersion">...</div>
+        </div>
+
+        <button class="more-info" onclick="alert('Hecho con ❤️ en 🇲🇽');">Más información...</button>
+
+        <div class="footer">
+            <div>Hecho por Isabelle M.</div>
+            <div>™ i © 2006-2025 plvxt.</div>
+            <div>Todos los derechos reservados.</div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>
