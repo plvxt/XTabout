@@ -1,0 +1,27 @@
+.more-info {
+  background-color: rgba(88, 89, 89, 0.613);
+  border: none;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 15px;
+  font-size: 13px;
+  -webkit-app-region: no-drag;
+  transition: all 0.2s ease-in-out;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.more-info:hover {
+  background-color: rgba(108, 109, 109, 0.713);
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.more-info:active {
+  background-color: rgba(88, 89, 89, 0.813);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+  transform: scale(0.98);
+}

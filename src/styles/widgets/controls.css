@@ -1,0 +1,41 @@
+.window-controls {
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    gap: 6px;
+    -webkit-app-region: no-drag;
+    z-index: 1000;
+}
+
+.control-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: transparent;
+  transition: color 0.2s;
+}
+
+.control-button.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.close {
+  background-color: #ff5f56;
+  cursor: pointer;
+}
+.close:hover {
+  color: #4c0002;
+}
+.minimize {
+  background-color: #424343;
+}
+.maximize {
+  background-color: #424343;
+}
