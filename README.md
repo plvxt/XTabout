@@ -14,10 +14,12 @@
 - Memoria RAM
 - Número de serie
 - Versión de macOS
-- Disco de arranque (Próximamente)
-- SMBIOS (Próximamente)
-- Pantallas (Próximamente)
-- Versión Darwin (Próximamente)
+- Disco de arranque
+- SMBIOS
+- Versión Metal
+- Versión Darwin
+- Compilación
+- Versión de XTabout
 
 
 ## Capturas de pantalla
