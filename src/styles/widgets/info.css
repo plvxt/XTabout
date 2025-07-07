@@ -16,6 +16,15 @@ h1 {
   position: relative;
 }
 
+.expandable {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.expandable[style*="display: block"] {
+  opacity: 1;
+}
+
 @media (prefers-color-scheme: dark) {
   h1 {
     color: #ffffff;

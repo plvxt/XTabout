@@ -6,12 +6,12 @@ async function getSystemInfo() {
     const cpuInfo = os.cpus()[0];
     
     const osVersion = await new Promise((resolve) => {
-        exec('sw_vers -productName && sw_vers -productVersion', (error, stdout) => {
+        exec('sw_vers -productName && sw_vers -productVersion && sw_vers -buildVersion', (error, stdout) => {
             if (error) {
                 resolve('macOS (versió desconeguda)');
                 return;
             }
-            const [productName, productVersion] = stdout.trim().split('\n');
+            const [productName, productVersion, buildVersion] = stdout.trim().split('\n');
             const majorVersion = parseInt(productVersion.split('.')[0]);
             let versionName = '';
             
@@ -42,19 +42,21 @@ async function getSystemInfo() {
                     versionName = 'macOS';
             }
             
-            resolve(`${versionName} ${productVersion}`);
+            resolve(`${versionName} ${productVersion} (${buildVersion})`);
         });
     });
 
     const [gpuInfo, memoryInfo, serialInfo] = await Promise.all([
         new Promise((resolve) => {
             exec('system_profiler SPDisplaysDataType', (error, stdout) => {
-                let graphicsInfo = 'Gráficos no detectats';
+                let graphicsInfo = 'Gráficos no detectados';
                 let vramInfo = '';
+                let metalInfo = 'Metal no detectado';
                 
                 if (!error) {
                     const modelMatch = stdout.match(/Chipset Model: (.+)/i);
                     const vramMatch = stdout.match(/VRAM \(.*\): ([\d,]+) ([GM]B)/i);
+                    const metalMatch = stdout.match(/Metal Support: ([^\n]+)/i);
                     
                     if (modelMatch) {
                         graphicsInfo = modelMatch[1];
@@ -62,9 +64,13 @@ async function getSystemInfo() {
                             vramInfo = ` (${vramMatch[1]}${vramMatch[2]} VRAM)`;
                         }
                     }
+
+                    if (metalMatch) {
+                        metalInfo = metalMatch[1];
+                    }
                 }
                 
-                resolve(graphicsInfo + vramInfo);
+                resolve({graphics: graphicsInfo + vramInfo, metal: metalInfo});
             });
         }),
         new Promise((resolve) => {
@@ -99,12 +105,48 @@ async function getSystemInfo() {
         })
     ]);
 
+    const [bootDrive, darwinVersion, smbiosModel] = await Promise.all([
+        new Promise((resolve) => {
+            exec('diskutil info / | grep "Volume Name" | sed "s/.*Volume Name: *//"', (error, stdout) => {
+                if (error) {
+                    resolve('No detectado');
+                    return;
+                }
+                resolve(stdout.trim() || 'No detectado');
+            });
+        }),
+        new Promise((resolve) => {
+            exec('uname -r', (error, stdout) => {
+                if (error) {
+                    resolve('No detectado');
+                    return;
+                }
+                resolve(stdout.trim());
+            });
+        }),
+        new Promise((resolve) => {
+            exec('system_profiler SPHardwareDataType | grep "Model Identifier"', (error, stdout) => {
+                if (error) {
+                    resolve('No detectado');
+                    return;
+                }
+                const modelMatch = stdout.match(/Model Identifier: ([^\n]+)/i);
+                resolve(modelMatch ? modelMatch[1] : 'No detectado');
+            });
+        })
+    ]);
+
     return {
         processor: `${cpuInfo.speed / 1000} GHz ${cpuInfo.model}`,
-        graphics: gpuInfo,
+        graphics: gpuInfo.graphics,
+        metal: gpuInfo.metal,
         memory: memoryInfo,
         serialNumber: serialInfo,
-        osVersion: osVersion
+        osVersion: osVersion,
+        bootDrive: bootDrive,
+        darwinVersion: darwinVersion,
+        smbiosModel: smbiosModel,
+        expanded: false
     };
 }
 

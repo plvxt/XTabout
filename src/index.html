@@ -7,6 +7,9 @@
     <script src="scripts/main.js"></script>
 </head>
 <body>
+    <div class="loading-screen">
+        <div class="loading-icon"></div>
+    </div>
     <div class="window-controls">
         <div class="control-button close" onclick="window.require('electron').ipcRenderer.send('window-controls', 'close')">✕</div>
         <div class="control-button minimize disabled">−</div>
@@ -42,15 +45,30 @@
             <div class="info-label">Memoria</div>
             <div class="info-value selectable" data-field="memory">...</div>
 
+            <div class="info-label expandable">Disco de arranque</div>
+            <div class="info-value selectable expandable" data-field="bootDrive">...</div>
+
             <div class="info-label">Número de serie</div>
             <div class="info-value selectable" id="serialNumberValue" data-field="serialNumber">...</div>
 
-
             <div class="info-label">macOS</div>
             <div class="info-value selectable" data-field="osVersion">...</div>
+
+
+            <div class="info-label expandable">SMBIOS</div>
+            <div class="info-value selectable expandable" data-field="smbiosModel">...</div>
+
+            <div class="info-label expandable">Metal</div>
+            <div class="info-value selectable expandable" data-field="metal">...</div>
+
+            <div class="info-label expandable">Darwin</div>
+            <div class="info-value selectable expandable" data-field="darwinVersion">...</div>
+
+            <div class="info-label expandable">XTabout</div>
+            <div class="info-value selectable expandable">07.07.2025</div>
         </div>
 
-        <button class="more-info" onclick="alert('Hecho con ❤️ en 🇲🇽');">Más información...</button>
+        <button class="more-info">Más información...</button>
 
         <div class="footer">
             <div>Hecho por Isabelle M.</div>

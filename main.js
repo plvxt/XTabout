@@ -12,21 +12,27 @@ function createMenu() {
     {
       label: 'XTabout',
       submenu: [
-
-        { label: 'GitHub',
+        { label: 'GitHub XTabout',
           click: async () => {
             const { shell } = require('electron');
             await shell.openExternal('https://github.com/plvxt/XTabout');
           }
         },
-        { label: 'YouTube',
+        { label: 'YouTube xFii',
           click: async () => {
             const { shell } = require('electron');
             await shell.openExternal('https://youtube.com/@xfii_');
           }
         },
+        { label: 'YouTube Hackintosh España',
+          click: async () => {
+            const { shell } = require('electron');
+            await shell.openExternal('https://www.youtube.com/@HackintoshEspa%C3%B1a');
+          }
+        },
         { type: 'separator' },
         { role: 'about' },
+        { role: 'copy' },
         { role: 'reload' },
         { role: 'quit' }
       ]
@@ -155,6 +161,12 @@ app.whenReady().then(() => {
     switch(action) {
       case 'close':
         app.quit();
+        break;
+      case 'expand':
+        mainWindow.setSize(329, 600);
+        break;
+      case 'collapse':
+        mainWindow.setSize(329, 514);
         break;
     }
   });
