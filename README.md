@@ -20,6 +20,7 @@
 - Versión Darwin
 - Compilación
 - Versión de XTabout
+- Versión de OpenCore
 
 
 ## Capturas de pantalla

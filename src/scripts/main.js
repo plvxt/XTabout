@@ -108,6 +108,7 @@ let isExpanded = false;
         document.querySelector('.info-value[data-field="smbiosModel"]').textContent = systemInfo.smbiosModel;
         document.querySelector('.info-value[data-field="metal"]').textContent = systemInfo.metal;
         document.querySelector('.info-value[data-field="darwinVersion"]').textContent = systemInfo.darwinVersion;
+        document.querySelector('.info-value[data-field="opencore"]').textContent = systemInfo.opencore;
 
         document.querySelectorAll('.expandable').forEach(element => {
             element.style.display = 'none';

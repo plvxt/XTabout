@@ -3,6 +3,7 @@ app.setName('XTabout')
 const path = require('path');
 const { setupSystemInfo } = require('./src/scripts/info');
 const config = require('./src/scripts/config');
+const https = require('https');
 
 let mainWindow;
 
@@ -33,6 +34,8 @@ function createMenu() {
         { type: 'separator' },
         { role: 'about' },
         { role: 'copy' },
+        /* NO USAR ESTE ROL EN PRODUCCIÓN */
+        /* { role: 'toggleDevTools' }, */
         { role: 'reload' },
         { role: 'quit' }
       ]
@@ -149,11 +152,65 @@ ipcMain.on('get-custom-image', (event) => {
   event.returnValue = imagePath || null;
 });
 
+async function checkForUpdates() {
+  const options = {
+    hostname: 'api.github.com',
+    path: '/repos/plvxt/xtabout/releases/latest',
+    headers: {
+      'User-Agent': 'XTabout-UpdateChecker'
+    }
+  };
+
+  const req = https.get(options, (res) => {
+    let data = '';
+    res.on('data', (chunk) => data += chunk);
+    res.on('end', async () => {
+      try {
+        const release = JSON.parse(data);
+        const latestVersion = release.tag_name;
+        const currentVersion = app.getVersion();
+        
+        console.log('Verificación de actualizaciones:');
+        console.log(`Versión instalada: ${currentVersion}`);
+        console.log(`Última versión: ${latestVersion}`);
+        
+        if (latestVersion !== currentVersion) {
+          console.log('Estado: Actualización disponible');
+          const response = await dialog.showMessageBox(mainWindow, {
+            type: 'info',
+            title: 'Actualización disponible',
+            message: `Hay una nueva versión disponible: ${latestVersion}`,
+            buttons: ['Descargar ahora', 'Actualizar más tarde'],
+            defaultId: 0,
+            cancelId: 1
+          });
+
+          if (response.response === 0) {
+            const { shell } = require('electron');
+            await shell.openExternal(`https://github.com/plvxt/xtabout/releases/tag/${latestVersion}`);
+          }
+        } else {
+          console.log('Estado: Versión actualizada');
+        }
+      } catch (error) {
+        console.error('Error al verificar actualizaciones:', error);
+      }
+    });
+  });
+
+  req.on('error', (error) => {
+    console.error('Error al verificar actualizaciones:', error);
+  });
+
+  req.end();
+}
+
 app.whenReady().then(() => {
   app.setName('XTabout');
   createWindow();
   createMenu();
   setupSystemInfo();
+  checkForUpdates();
 
   ipcMain.on('window-controls', (event, action) => {
     if (!mainWindow) return;
@@ -163,7 +220,7 @@ app.whenReady().then(() => {
         app.quit();
         break;
       case 'expand':
-        mainWindow.setSize(329, 600);
+        mainWindow.setSize(329, 635);
         break;
       case 'collapse':
         mainWindow.setSize(329, 514);

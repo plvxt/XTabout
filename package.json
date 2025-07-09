@@ -1,7 +1,7 @@
 {
   "name": "xtabout",
   "productName": "XTabout",
-  "version": "07.07.2025",
+  "version": "09.07.2025",
   "description": "Herramienta para mostrar la información de macOS de una manera más linda.",
   "main": "main.js",
   "scripts": {

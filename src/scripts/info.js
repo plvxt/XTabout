@@ -105,7 +105,7 @@ async function getSystemInfo() {
         })
     ]);
 
-    const [bootDrive, darwinVersion, smbiosModel] = await Promise.all([
+    const [bootDrive, darwinVersion, smbiosModel, opencoreVersion] = await Promise.all([
         new Promise((resolve) => {
             exec('diskutil info / | grep "Volume Name" | sed "s/.*Volume Name: *//"', (error, stdout) => {
                 if (error) {
@@ -133,6 +133,22 @@ async function getSystemInfo() {
                 const modelMatch = stdout.match(/Model Identifier: ([^\n]+)/i);
                 resolve(modelMatch ? modelMatch[1] : 'No detectado');
             });
+        }),
+        new Promise((resolve) => {
+            exec('nvram 4D1FDA02-38C7-4A6A-9CC6-4BCCA8B30102:opencore-version', (error, stdout) => {
+                if (error) {
+                    resolve('No detectado');
+                    return;
+                }
+                const versionMatch = stdout.match(/REL-(\d+)/);
+                if (versionMatch) {
+                    const version = versionMatch[1];
+                    const formattedVersion = `${version.slice(0, 1)}.${version.slice(1, 2)}.${version.slice(2)}`;
+                    resolve(`${formattedVersion} Release`);
+                } else {
+                    resolve('No detectado');
+                }
+            });
         })
     ]);
 
@@ -146,6 +162,7 @@ async function getSystemInfo() {
         bootDrive: bootDrive,
         darwinVersion: darwinVersion,
         smbiosModel: smbiosModel,
+        opencore: opencoreVersion,
         expanded: false
     };
 }
